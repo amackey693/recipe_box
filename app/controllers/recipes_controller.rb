@@ -1,7 +1,7 @@
-class RecipesController < ApplicationController 
+class RecipeController < ApplicationController 
 
   def index
-    @recipes = Recipes.all
+    @recipes = Recipe.all
     render :index
   end
 
