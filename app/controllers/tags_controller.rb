@@ -1,29 +1,33 @@
-class TagController < ApplicationController
+class TagsController < ApplicationController
 
+  def index
+    @tags = Tag.all
+    render :index 
+  end
+  
   def new
-    @recipe = Recipe.find(params[:recipe_id])
-    @tag = @recipes.tags.new
+    @tag = Tag.new
     render :new
   end
 
   def create
-     @recipe = Recipe.find(params[:recipe_id])
-     @tag = @recipes.tags.new(tag_params)
+     @tag = Tag.new(tag_params)
      if @tag.save
-      redirect_to recipe_path(@recipe)
+      redirect_to tags_path
     else
       render :new
     end
   end
 
   def edit
-    @recipe = Recipe.find(params[:album_id])
+    @recipe = Recipe.find(params[:id])
     @tag = Tag.find(params[:id])
+    @tag.recipes << @recipe
     render :edit
   end
-
+  
   def show
-    @recipe = Recipe.find(params[:album_id])
+    @recipes = Recipe.all
     @tag = Tag.find(params[:id])
     render :show
   end
@@ -31,12 +35,18 @@ class TagController < ApplicationController
   def update
     @tag = Tag.find(params[:id])
     if @tag.update(tag_params)
-      redirect_to recipe_path
+      redirect_to tag_path
+    end
   end
 
   def destroy
    @tag = Tag.find(params[:id])
-  @tag.destroy
-  redirect_to reci_path(@song.album)
+   @tag.destroy
+   redirect_to tags_path
+  end
+
+  private 
+  def tag_params
+    params.require(:tag).permit(:name)
   end
 end
